@@ -11,7 +11,7 @@ jobs:
           ndk-version: r25c
       - name: Install CMake and Ninja
         run: sudo apt-get update && sudo apt-get install -y cmake ninja-build
-      - name: Build DobbyHook
+      - name: Build DobbyHook (static)
         run: |
           mkdir build && cd build
           cmake .. \
@@ -23,10 +23,11 @@ jobs:
             -DPlugin.SymbolResolver=OFF \
             -DCMAKE_C_FLAGS="-UANDROID" \
             -DCMAKE_CXX_FLAGS="-UANDROID" \
+            -DBUILD_SHARED_LIBS=OFF \
             -G Ninja
           ninja -j$(nproc)
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: libdobby-arm64
-          path: build/libdobby.so
+          name: libdobby-static
+          path: build/libdobby.a
