@@ -21,6 +21,8 @@ jobs:
             -DANDROID_STL=c++_static \
             -DCMAKE_BUILD_TYPE=Release \
             -DPlugin.SymbolResolver=OFF \
+            -DCMAKE_C_FLAGS="-UANDROID" \
+            -DCMAKE_CXX_FLAGS="-UANDROID" \
             -G Ninja
           ninja -j$(nproc)
       - name: Upload artifact
