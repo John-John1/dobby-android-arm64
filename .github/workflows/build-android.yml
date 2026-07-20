@@ -1,26 +1,16 @@
 name: Build Android ARM64
-
-on:
-  push:
-    branches: [master]
-  workflow_dispatch:
-
+on: workflow_dispatch
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
-      - name: Setup Android NDK
+      - name: Setup Android NDK r25
         uses: nttld/setup-ndk@v1
         with:
           ndk-version: r25c
-
       - name: Install CMake and Ninja
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y cmake ninja-build
-
+        run: sudo apt-get update && sudo apt-get install -y cmake ninja-build
       - name: Build DobbyHook
         run: |
           mkdir build && cd build
@@ -30,9 +20,9 @@ jobs:
             -DANDROID_PLATFORM=android-26 \
             -DANDROID_STL=c++_static \
             -DCMAKE_BUILD_TYPE=Release \
+            -DPlugin.SymbolResolver=OFF \
             -G Ninja
           ninja -j$(nproc)
-
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
