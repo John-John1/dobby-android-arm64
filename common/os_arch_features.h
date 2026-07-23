@@ -1,4 +1,18 @@
 #pragma once
+#include <sys/mman.h>
+#include <unistd.h>
+
+// Forward declarations for Android build
+class OSMemory {
+public:
+    static int PageSize() { return sysconf(_SC_PAGESIZE); }
+    static void *Allocate(size_t size, int access);
+    static bool SetPermission(void *address, size_t size, int permission);
+    static bool Free(void *address, size_t size);
+};
+
+enum MemoryPermission { kNoAccess = 0, kRead = 1, kWrite = 2, kExecute = 4, kReadWrite = 3, kReadExecute = 5, kReadWriteExecute = 7 };
+static const int kReadExecute = 5;
 
 #include <sys/types.h>
 #include <stddef.h>
